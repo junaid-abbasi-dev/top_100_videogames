@@ -1,3 +1,4 @@
+require 'pry'
 class Cli
     attr_reader :games
     def initialize
@@ -23,10 +24,9 @@ class Cli
         if user_input == "\n"
             list_games
         elsif user_input == "exit\n"
-            puts "----------"
             puts "Good-bye. Hope to see you again! :)"
         else
-            puts "Wrong input!"
+            puts "Wrong input! Press 'enter/return' key to see the list again or type 'exit' key to exit"
             ask_user
         end
     end
@@ -42,24 +42,28 @@ class Cli
 
     def user_selection
         puts "Type the number of list you'd like to know more about, or type 'exit' to leave"
-        input = gets.strip
+        input = gets.strip.downcase
         converted_input = input.to_i
-        while converted_input != "exit"
-            if converted_input.between?(1, 100)
+        #binding.pry
+        if input == "exit"
+            puts "Good-bye. Hope to see you again! :)"
+        end
+
+        while input != "exit"
+            if converted_input.between?(1, games.count)
                 game = Game.all[converted_input - 1]
                 display_game_info(game)
-                break
-            elsif converted_input == "exit"
+                puts "Press 'enter/return' key to see the list again or type 'exit' key to exit"
                 ask_user
+                break
             else
                 puts "Wrong input! Please type an integer between 1 and #{games.length}"
                 puts "--"
                 user_selection
+                break
             end
+            
         end
-        puts "---------------"
-        puts "Press 'enter/return' key to see the list again or type 'exit' key to exit"
-        ask_user
     end
 
     def display_game_info(game)
