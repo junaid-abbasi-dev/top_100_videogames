@@ -1,7 +1,12 @@
 require 'nokogiri'
 require 'open-uri'
 require 'pry'
-
+require "tty-box"
+require "tty-color"
+require "tty-font"
+require "pastel"
+require "tty-progressbar"
+require "tty-spinner"
 
 
 require_relative "./top_100_videogames/version"
