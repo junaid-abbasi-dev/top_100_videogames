@@ -1,6 +1,6 @@
-require 'nokogiri'
-require 'open-uri'
-require 'pry'
+require "nokogiri"
+require "open-uri"
+require "pry"
 require "tty-box"
 require "tty-color"
 require "tty-font"

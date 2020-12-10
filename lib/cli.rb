@@ -21,9 +21,6 @@ class Cli
     end
 
     def menu
-        # Greet user and and ask for input to continue or exit.
-        # box = TTY::Box.frame "Hi! Welcome to Command Line", "Top 100 Video Games of all time", padding: 3, align: :center, title: {top_left: "TOP 100 VIDEO GAMES", bottom_right: "v1.0"}
-        # print box
         font = TTY::Font.new(:starwars)
         pastel = Pastel.new
         puts pastel.cyan(font.write("top 100"))
@@ -48,23 +45,14 @@ class Cli
 
     def list_games
         # List all the games and ask for input to see additional list or exit program
-        #@count ||= 0
         games.each_with_index do |game, i|
             puts "#{i+1}. #{game.title}"
         end
-
-
-        # puts "Next -->" if count.between?(0, 19)
-        # puts "<-- Previous or Next -->" if count.between?(19, 80)
-        # puts "<-- Previous" if count.between?(19, 100) 
-        # puts "<-- All -->" if count != 100  
-
         user_selection
     end
 
     def user_selection
         puts "Type the number of list you'd like to know more about, or type 'exit' to leave"
-        # puts "Type 'next' to see the next list, or 'previous' to see the previous list or 'exit' to exit the list"
         input = gets.strip.downcase
         converted_input = input.to_i
         # binding.pry
@@ -79,16 +67,6 @@ class Cli
                 puts "Press 'enter/return' key to see the list again or type 'exit' key to exit"
                 ask_user
                 break
-            # elsif input == "next"
-            #     self.count += 19
-            #     list_games
-            #     break
-            # elsif input == "previous"
-            #     self.count -= 19
-            #     list_games
-            #     break
-            # elsif input == "exit"
-            #     exit_message
             else
                 puts "Wrong input! Please type an integer between 1 and #{games.length}"
                 user_selection
