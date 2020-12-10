@@ -1,6 +1,5 @@
 require 'pry'
 class Cli
-    #attr_accessor :count
     attr_reader :games, :pastel, :font
     def initialize
         @games = Game.all
@@ -10,7 +9,7 @@ class Cli
     end
 
     def loading
-        spinner = TTY::Spinner.new("[:spinner] #{pastel.cyan("Loading...")}", format: :pulse_2)
+        spinner = TTY::Spinner.new("[:spinner] #{pastel.yellow("Loading...")}", format: :pulse_2)
         spinner.auto_spin
         sleep(2)
         spinner.stop()
@@ -28,14 +27,6 @@ class Cli
         puts pastel.cyan(font.write("of all time"))
         user_choice_message
         ask_user
-    end
-
-    def user_choice_message
-        puts "Press '#{pastel.yellow("enter/return")}' key to see the list or type '#{pastel.red("exit")}' to exit"
-    end
-
-    def wrong_input
-        puts "#{pastel.red("Wrong Input!")}"
     end
 
     def ask_user
@@ -92,6 +83,16 @@ class Cli
         puts "#{pastel.yellow("Release year:")} #{game.released}"
         puts "#{pastel.yellow("Description:")} #{game.description}"
         puts pastel.cyan(font.write("//")) 
+    end
+
+    # User Messages --
+
+    def user_choice_message
+        puts "Press '#{pastel.yellow("enter/return")}' key to see the list or type '#{pastel.red("exit")}' to exit"
+    end
+
+    def wrong_input
+        puts "#{pastel.red("Wrong Input!")}"
     end
 
     def exit_message
