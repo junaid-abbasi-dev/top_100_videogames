@@ -1,14 +1,15 @@
 require 'pry'
 class Cli
     #attr_accessor :count
-    attr_reader :games
+    attr_reader :games, :pastel
     def initialize
         @games = Game.all
+        @pastel = Pastel.new
         loading
     end
 
     def loading
-        spinner = TTY::Spinner.new("[:spinner] Loading...", format: :pulse_2)
+        spinner = TTY::Spinner.new("[:spinner] #{pastel.cyan("Loading...")}", format: :pulse_2)
         spinner.auto_spin
         sleep(2)
         spinner.stop()
@@ -22,14 +23,21 @@ class Cli
 
     def menu
         font = TTY::Font.new(:starwars)
-        pastel = Pastel.new
+        #pastel = Pastel.new
         puts pastel.cyan(font.write("top 100"))
         puts pastel.cyan(font.write("video games"))
         puts pastel.cyan(font.write("of all time"))
-        puts "Press 'enter/return' key to see the list or type 'exit' key to exit"
+        user_choice_message
         ask_user
     end
 
+    def user_choice_message
+        puts "Press '#{pastel.yellow("enter/return")}' key to see the list or type '#{pastel.red("exit")}' to exit"
+    end
+
+    def wrong_input
+        puts "#{pastel.red("Wrong Input!")}"
+    end
     def ask_user
         # Get user input and call method according to it
         user_input = gets.downcase
@@ -38,7 +46,8 @@ class Cli
         elsif user_input == "exit\n"
             exit_message
         else
-            puts "Wrong input! Press 'enter/return' key to see the list again or type 'exit' key to exit"
+            wrong_input
+            user_choice_message
             ask_user
         end
     end
@@ -46,13 +55,13 @@ class Cli
     def list_games
         # List all the games and ask for input to see additional list or exit program
         games.each_with_index do |game, i|
-            puts "#{i+1}. #{game.title}"
+            puts "#{pastel.yellow(i+1)}. #{game.title}"
         end
         user_selection
     end
 
     def user_selection
-        puts "Type the number of list you'd like to know more about, or type 'exit' to leave"
+        puts "Type the number of list you'd like to know more about, or type '#{pastel.red("exit")}' to leave"
         input = gets.strip.downcase
         converted_input = input.to_i
         # binding.pry
@@ -64,11 +73,12 @@ class Cli
             if converted_input.between?(1, games.count)
                 game = Game.all[converted_input - 1]
                 display_game_info(game)
-                puts "Press 'enter/return' key to see the list again or type 'exit' key to exit"
+                user_choice_message
                 ask_user
                 break
             else
-                puts "Wrong input! Please type an integer between 1 and #{games.length}"
+                wrong_input
+                puts "Please type an integer between #{pastel.yellow(1)} and #{pastel.yellow(games.length)}"
                 user_selection
                 break
             end    
@@ -79,15 +89,17 @@ class Cli
         #font = TTY::Font.new(:starwars)
         # pastel = Pastel.new
         # puts pastel.cyan(font.write("#{game.title.gsub(/[\r\n]+/, ' ')}"))
-        puts "Title: #{game.title}"
-        puts "Rank: #{game.ranking}"
-        puts "Release year: #{game.released}"
-        puts "Description: #{game.description}"
+        font = TTY::Font.new(:starwars)
+        puts pastel.cyan(font.write("//")) 
+        puts "#{pastel.yellow("Title:")} #{game.title}"
+        puts "#{pastel.yellow("Rank:")} #{game.ranking}"
+        puts "#{pastel.yellow("Release year:")} #{game.released}"
+        puts "#{pastel.yellow("Description:")} #{game.description}"
+        puts pastel.cyan(font.write("//")) 
     end
 
     def exit_message
         font = TTY::Font.new(:starwars)
-        pastel = Pastel.new
         puts pastel.cyan(font.write("Good-bye :)"))
     end
 end
