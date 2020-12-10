@@ -1,6 +1,6 @@
 require 'pry'
 class Cli
-    attr_accessor :count
+    #attr_accessor :count
     attr_reader :games
     def initialize
         @games = Game.all
@@ -48,18 +48,16 @@ class Cli
 
     def list_games
         # List all the games and ask for input to see additional list or exit program
-        @count ||= 0
-        list_num = 0
-        games[count..count+19].each_with_index do |game, i|
-            puts "#{list_num+1}. #{game.title}"
-            list_num += 1
+        #@count ||= 0
+        games.each_with_index do |game, i|
+            puts "#{i+1}. #{game.title}"
         end
 
 
-        puts "Next -->" if count.between?(0, 19)
-        puts "<-- Previous or Next -->" if count.between?(19, 80)
-        puts "<-- Previous" if count.between?(19, 100) 
-        #puts "<-- All -->" if count != 100  
+        # puts "Next -->" if count.between?(0, 19)
+        # puts "<-- Previous or Next -->" if count.between?(19, 80)
+        # puts "<-- Previous" if count.between?(19, 100) 
+        # puts "<-- All -->" if count != 100  
 
         user_selection
     end
@@ -81,16 +79,16 @@ class Cli
                 puts "Press 'enter/return' key to see the list again or type 'exit' key to exit"
                 ask_user
                 break
-            elsif input == "next"
-                self.count += 19
-                list_games
-                break
-            elsif input == "previous"
-                self.count -= 19
-                list_games
-                break
-            elsif input == "exit"
-                exit_message
+            # elsif input == "next"
+            #     self.count += 19
+            #     list_games
+            #     break
+            # elsif input == "previous"
+            #     self.count -= 19
+            #     list_games
+            #     break
+            # elsif input == "exit"
+            #     exit_message
             else
                 puts "Wrong input! Please type an integer between 1 and #{games.length}"
                 user_selection
