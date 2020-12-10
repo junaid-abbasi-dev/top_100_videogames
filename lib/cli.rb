@@ -1,10 +1,11 @@
 require 'pry'
 class Cli
     #attr_accessor :count
-    attr_reader :games, :pastel
+    attr_reader :games, :pastel, :font
     def initialize
         @games = Game.all
         @pastel = Pastel.new
+        @font = TTY::Font.new(:starwars)
         loading
     end
 
@@ -22,8 +23,6 @@ class Cli
     end
 
     def menu
-        font = TTY::Font.new(:starwars)
-        #pastel = Pastel.new
         puts pastel.cyan(font.write("top 100"))
         puts pastel.cyan(font.write("video games"))
         puts pastel.cyan(font.write("of all time"))
@@ -38,6 +37,7 @@ class Cli
     def wrong_input
         puts "#{pastel.red("Wrong Input!")}"
     end
+
     def ask_user
         # Get user input and call method according to it
         user_input = gets.downcase
@@ -86,10 +86,6 @@ class Cli
     end
 
     def display_game_info(game)
-        #font = TTY::Font.new(:starwars)
-        # pastel = Pastel.new
-        # puts pastel.cyan(font.write("#{game.title.gsub(/[\r\n]+/, ' ')}"))
-        font = TTY::Font.new(:starwars)
         puts pastel.cyan(font.write("//")) 
         puts "#{pastel.yellow("Title:")} #{game.title}"
         puts "#{pastel.yellow("Rank:")} #{game.ranking}"
@@ -99,7 +95,6 @@ class Cli
     end
 
     def exit_message
-        font = TTY::Font.new(:starwars)
         puts pastel.cyan(font.write("Good-bye :)"))
     end
 end
