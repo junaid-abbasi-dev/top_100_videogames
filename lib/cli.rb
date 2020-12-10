@@ -1,5 +1,6 @@
 require 'pry'
 class Cli
+    attr_accessor :count
     attr_reader :games
     def initialize
         @games = Game.all
@@ -18,8 +19,6 @@ class Cli
         Scraper.scrape_games
         menu
     end
-    
-    
 
     def menu
         # Greet user and and ask for input to continue or exit.
@@ -30,7 +29,6 @@ class Cli
         puts pastel.cyan(font.write("top 100"))
         puts pastel.cyan(font.write("video games"))
         puts pastel.cyan(font.write("of all time"))
-        #puts "Hi! Welcome to Command Line Top 100 Video Games of all time."
         puts "Press 'enter/return' key to see the list or type 'exit' key to exit"
         ask_user
     end
@@ -50,18 +48,28 @@ class Cli
 
     def list_games
         # List all the games and ask for input to see additional list or exit program
-        count = 101
-        games.each_with_index do |game, i|
-            puts "#{i+1}. #{game.title}"
+        @count ||= 0
+        list_num = 0
+        games[count..count+19].each_with_index do |game, i|
+            puts "#{list_num+1}. #{game.title}"
+            list_num += 1
         end
+
+
+        puts "Next -->" if count.between?(0, 19)
+        puts "<-- Previous or Next -->" if count.between?(19, 80)
+        puts "<-- Previous" if count.between?(19, 100) 
+        #puts "<-- All -->" if count != 100  
+
         user_selection
     end
 
     def user_selection
         puts "Type the number of list you'd like to know more about, or type 'exit' to leave"
+        # puts "Type 'next' to see the next list, or 'previous' to see the previous list or 'exit' to exit the list"
         input = gets.strip.downcase
         converted_input = input.to_i
-        #binding.pry
+        # binding.pry
         if input == "exit"
             exit_message
         end
@@ -73,6 +81,16 @@ class Cli
                 puts "Press 'enter/return' key to see the list again or type 'exit' key to exit"
                 ask_user
                 break
+            elsif input == "next"
+                self.count += 19
+                list_games
+                break
+            elsif input == "previous"
+                self.count -= 19
+                list_games
+                break
+            elsif input == "exit"
+                exit_message
             else
                 puts "Wrong input! Please type an integer between 1 and #{games.length}"
                 user_selection
@@ -82,7 +100,10 @@ class Cli
     end
 
     def display_game_info(game)
-        puts "#{game.title}"
+        #font = TTY::Font.new(:starwars)
+        # pastel = Pastel.new
+        # puts pastel.cyan(font.write("#{game.title.gsub(/[\r\n]+/, ' ')}"))
+        puts "Title: #{game.title}"
         puts "Rank: #{game.ranking}"
         puts "Release year: #{game.released}"
         puts "Description: #{game.description}"
