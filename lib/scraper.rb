@@ -8,6 +8,7 @@ class Scraper
         game_articles.map do |game|
             #binding.pry   
             hash = {
+                fact: game.css("ul.ul li.item-highlight").first.text.strip,
                 description: game.css("div.item-body p").first.text.strip,
                 released: game.css("span.item-label-value").first.text.strip,
                 ranking: game.css("div.badge-number").first.text.strip,

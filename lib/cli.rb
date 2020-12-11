@@ -110,6 +110,7 @@ class Cli
         puts "#{pastel.yellow("Rank:")} #{game.ranking}"
         puts "#{pastel.yellow("Release year:")} #{game.released}"
         puts "#{pastel.yellow("Description:")} #{game.description}"
+        puts "#{pastel.yellow("fact:")} #{game.fact}"
         puts pastel.cyan(font.write("//")) 
     end
 
