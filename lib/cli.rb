@@ -1,5 +1,6 @@
 require 'pry'
 class Cli
+    attr_accessor :count
     attr_reader :games, :pastel, :font
     def initialize
         @games = Game.all
@@ -22,9 +23,7 @@ class Cli
     end
 
     def menu
-        puts pastel.cyan(font.write("top 100"))
-        puts pastel.cyan(font.write("video games"))
-        puts pastel.cyan(font.write("of all time"))
+        greeting_message
         user_choice_message
         ask_user
     end
@@ -45,8 +44,27 @@ class Cli
 
     def list_games
         # List all the games and ask for input to see additional list or exit program
-        games.each_with_index do |game, i|
-            puts "#{pastel.yellow(i+1)}. #{game.title}"
+        @count ||= 0
+        games[count..count+19].each.with_index(1) do |game, i|
+            puts "#{pastel.yellow(count+i)}. #{game.title}"
+        end
+
+        # puts "#{pastel.yellow("Next")} -->" if count.between?(0, 19)
+        # puts "<-- #{pastel.yellow("Previous")} or #{pastel.yellow("Next")} -->" if count.between?(19, 80)
+        # puts "<-- #{pastel.yellow("Previous")}" if count.between?(19, 100) 
+        # puts "<-- All -->" if count != 100
+
+        if count.between?(0, 19)
+            puts "#{pastel.yellow("Next")} -->"
+        elsif count.between?(19, 40)
+            puts "<-- #{pastel.yellow("Previous")} or #{pastel.yellow("Next")} -->"    
+        elsif count.between?(19, 80)
+            puts "<-- #{pastel.yellow("Previous")} or #{pastel.yellow("Next")} -->"
+        elsif count.between?(19, 100)
+            puts "<-- #{pastel.yellow("Previous")}"
+        else
+            wrong_input
+            puts "Please type an integer between #{pastel.yellow(1)} and #{pastel.yellow(games.length)}"
         end
         user_selection
     end
@@ -67,6 +85,16 @@ class Cli
                 user_choice_message
                 ask_user
                 break
+            elsif input == "next"
+                self.count += 19
+                list_games
+                break
+            elsif input == "previous"
+                self.count -= 19
+                list_games
+                break
+            elsif input == "exit"
+                exit_message
             else
                 wrong_input
                 puts "Please type an integer between #{pastel.yellow(1)} and #{pastel.yellow(games.length)}"
@@ -87,6 +115,13 @@ class Cli
 
     # User Messages --
 
+    def greeting_message
+        puts pastel.yellow(font.write("welcome to"))
+        puts pastel.yellow(font.write("top 100"))
+        puts pastel.yellow(font.write("video games"))
+        puts pastel.yellow(font.write("of all time"))
+    end
+    
     def user_choice_message
         puts "Press '#{pastel.yellow("enter/return")}' key to see the list or type '#{pastel.red("exit")}' to exit"
     end
@@ -96,6 +131,6 @@ class Cli
     end
 
     def exit_message
-        puts pastel.cyan(font.write("Good-bye :)"))
+        puts pastel.yellow(font.write("Good-bye :)"))
     end
 end
