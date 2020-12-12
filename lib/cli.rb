@@ -1,4 +1,3 @@
-require 'pry'
 class Cli
     attr_accessor :count
     attr_reader :games, :pastel, :font
@@ -30,7 +29,7 @@ class Cli
 
     def ask_user
         # Get user input and call method according to it
-        user_input = gets.downcase
+        user_input = gets.strip.downcase
         if user_input == "\n"
             list_games
         elsif user_input == "exit\n"
@@ -44,6 +43,12 @@ class Cli
 
     def list_games
         # List all the games and ask for input to see additional list or exit program
+        # binding.pry
+        # if @count
+        #     @count
+        # else
+        #     @count = 0
+        # end
         @count ||= 0
         games[count..count+19].each.with_index(1) do |game, i|
             puts "#{pastel.yellow(count+i)}. #{game.title}"
@@ -54,10 +59,8 @@ class Cli
         # puts "<-- #{pastel.yellow("Previous")}" if count.between?(19, 100) 
         # puts "<-- All -->" if count != 100
 
-        if count.between?(0, 19)
-            puts "#{pastel.yellow("Next")} -->"
-        elsif count.between?(19, 40)
-            puts "<-- #{pastel.yellow("Previous")} or #{pastel.yellow("Next")} -->"    
+        if count.between?(0, 18)
+            puts "#{pastel.yellow("Next")} -->"   
         elsif count.between?(19, 80)
             puts "<-- #{pastel.yellow("Previous")} or #{pastel.yellow("Next")} -->"
         elsif count.between?(19, 100)
@@ -87,6 +90,7 @@ class Cli
                 break
             elsif input == "next"
                 self.count += 19
+                # binding.pry
                 list_games
                 break
             elsif input == "previous"
@@ -110,14 +114,13 @@ class Cli
         puts "#{pastel.yellow("Rank:")} #{game.ranking}"
         puts "#{pastel.yellow("Release year:")} #{game.released}"
         puts "#{pastel.yellow("Description:")} #{game.description}"
-        puts "#{pastel.yellow("fact:")} #{game.fact}"
+        puts "#{pastel.yellow("Fact:")} #{game.fact}"
         puts pastel.cyan(font.write("//")) 
     end
 
     # User Messages --
 
     def greeting_message
-        puts pastel.yellow(font.write("welcome to"))
         puts pastel.yellow(font.write("top 100"))
         puts pastel.yellow(font.write("video games"))
         puts pastel.yellow(font.write("of all time"))
