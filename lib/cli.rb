@@ -49,11 +49,11 @@ class Cli
         end
 
         if count.between?(0, 18)
-            puts "Type '#{pastel.yellow("Next")}' to see more list of games"   
+            next_msg
         elsif count.between?(19, 80)
-            puts "Type '#{pastel.yellow("Previous")}' to see previous list or '#{pastel.yellow("Next")}' to see more list"
+            previous_msg
         elsif count.between?(19, 100)
-            puts "Type '#{pastel.yellow("Previous")}' to see previous list of games "
+            next_or_previous
         else
             wrong_input
             puts "Please type an integer between #{pastel.yellow(1)} and #{pastel.yellow(games.length)}"
@@ -119,6 +119,18 @@ class Cli
 
     def wrong_input
         puts "#{pastel.red("Wrong Input!")}"
+    end
+
+    def next_msg
+        puts "Type '#{pastel.yellow("Next")}' to see more list of games"  
+    end
+
+    def previous_msg
+        puts "Type '#{pastel.yellow("Previous")}' to see previous list or '#{pastel.yellow("Next")}' to see more list"
+    end
+
+    def next_or_previous
+        puts "Type '#{pastel.yellow("Previous")}' to see previous list of games "
     end
 
     def exit_message
