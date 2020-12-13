@@ -29,7 +29,7 @@ class Cli
 
     def ask_user
         # Get user input and call method according to it
-        user_input = gets.strip.downcase
+        user_input = gets.downcase
         if user_input == "\n"
             list_games
         elsif user_input == "exit\n"
@@ -43,28 +43,17 @@ class Cli
 
     def list_games
         # List all the games and ask for input to see additional list or exit program
-        # binding.pry
-        # if @count
-        #     @count
-        # else
-        #     @count = 0
-        # end
         @count ||= 0
         games[count..count+19].each.with_index(1) do |game, i|
             puts "#{pastel.yellow(count+i)}. #{game.title}"
         end
 
-        # puts "#{pastel.yellow("Next")} -->" if count.between?(0, 19)
-        # puts "<-- #{pastel.yellow("Previous")} or #{pastel.yellow("Next")} -->" if count.between?(19, 80)
-        # puts "<-- #{pastel.yellow("Previous")}" if count.between?(19, 100) 
-        # puts "<-- All -->" if count != 100
-
         if count.between?(0, 18)
-            puts "#{pastel.yellow("Next")} -->"   
+            puts "Type '#{pastel.yellow("Next")}' to see more list of games -->"   
         elsif count.between?(19, 80)
-            puts "<-- #{pastel.yellow("Previous")} or #{pastel.yellow("Next")} -->"
+            puts "Type '#{pastel.yellow("Previous")}' to see previous list or '#{pastel.yellow("Next")}' to see more list"
         elsif count.between?(19, 100)
-            puts "<-- #{pastel.yellow("Previous")}"
+            puts "Type '#{pastel.yellow("Previous")}' to see previous list of games "
         else
             wrong_input
             puts "Please type an integer between #{pastel.yellow(1)} and #{pastel.yellow(games.length)}"
@@ -76,7 +65,6 @@ class Cli
         puts "Type the number of list you'd like to know more about, or type '#{pastel.red("exit")}' to leave"
         input = gets.strip.downcase
         converted_input = input.to_i
-        # binding.pry
         if input == "exit"
             exit_message
         end
@@ -90,7 +78,6 @@ class Cli
                 break
             elsif input == "next"
                 self.count += 19
-                # binding.pry
                 list_games
                 break
             elsif input == "previous"
