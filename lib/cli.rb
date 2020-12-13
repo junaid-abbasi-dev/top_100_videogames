@@ -49,7 +49,7 @@ class Cli
         end
 
         if count.between?(0, 18)
-            puts "Type '#{pastel.yellow("Next")}' to see more list of games -->"   
+            puts "Type '#{pastel.yellow("Next")}' to see more list of games"   
         elsif count.between?(19, 80)
             puts "Type '#{pastel.yellow("Previous")}' to see previous list or '#{pastel.yellow("Next")}' to see more list"
         elsif count.between?(19, 100)
