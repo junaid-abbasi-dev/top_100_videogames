@@ -8,13 +8,6 @@ class Cli
         loading
     end
 
-    def loading
-        spinner = TTY::Spinner.new("[:spinner] #{pastel.yellow("Loading...")}", format: :pulse_2)
-        spinner.auto_spin
-        sleep(2)
-        spinner.stop()
-    end
-
     def run
         # Run the program by calling Scraper class to get the remote data from the site, and greet user
         Scraper.scrape_games
@@ -106,6 +99,13 @@ class Cli
     end
 
     # User Messages --
+
+    def loading
+        spinner = TTY::Spinner.new("[:spinner] #{pastel.yellow("Loading...")}", format: :pulse_2)
+        spinner.auto_spin
+        sleep(2)
+        spinner.stop()
+    end
 
     def greeting_message
         puts pastel.yellow(font.write("top 100"))
