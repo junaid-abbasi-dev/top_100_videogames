@@ -97,6 +97,7 @@ class Cli
         puts "#{pastel.yellow("Fact:")} #{game.fact}"
         puts pastel.cyan(font.write("//")) 
     end
+        
 
     # User Messages --
 
