@@ -16,4 +16,10 @@ class Game
     def self.all
         @@all
     end
+    
+    def self.find_all_games_by_year(year)
+        #binding.pry
+        all.select {|game| game.released.to_i == year} 
+    end
+
 end

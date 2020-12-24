@@ -1,6 +1,6 @@
 class Cli
     attr_accessor :count
-    attr_reader :games, :pastel, :font
+    attr_reader :games, :pastel, :font, :years_sorted
     def initialize
         @games = Game.all
         @pastel = Pastel.new
@@ -24,9 +24,12 @@ class Cli
         # Get user input and call method according to it
         user_input = gets.downcase
         if user_input == "\n"
-            list_games
+            list_games(games)
         elsif user_input == "exit\n"
             exit_message
+        elsif user_input.to_i.between?(1990, 2020)
+            game_list = Game.find_all_games_by_year(user_input.to_i)
+            list_games(game_list)
         else
             wrong_input
             user_choice_message
@@ -34,22 +37,26 @@ class Cli
         end
     end
 
-    def list_games
+    def list_games(game_list)
         # List all the games and ask for input to see additional list or exit program
+        @game_list = game_list
         @count ||= 0
-        games[count..count+19].each.with_index(1) do |game, i|
+        game_list[count..count+19].each.with_index(1) do |game, i|
             puts "#{pastel.yellow(count+i)}. #{game.title}"
         end
 
-        if count.between?(0, 18)
+        if count.between?(0, 18) && game_list.size > 20
             next_msg
-        elsif count.between?(19, 80)
+        elsif count.between?(19, 80) && game_list.size > 20
             previous_msg
-        elsif count.between?(19, 100)
+        elsif count.between?(19, 100) && game_list.size > 20
             next_or_previous
+        elsif game_list.size < 20
+            #puts "Please type an integer between #{pastel.yellow(1)} and #{pastel.yellow(game_list.length)}"
+            puts 
         else
             wrong_input
-            puts "Please type an integer between #{pastel.yellow(1)} and #{pastel.yellow(games.length)}"
+            puts "Please type an integer between #{pastel.yellow(1)} and #{pastel.yellow(game_list.length)}"
         end
         user_selection
     end
@@ -63,30 +70,33 @@ class Cli
         end
 
         while input != "exit"
-            if converted_input.between?(1, games.count)
-                game = Game.all[converted_input - 1]
+            if converted_input.between?(1, @game_list.count)
+                game = @game_list[converted_input - 1]
                 display_game_info(game)
                 user_choice_message
                 ask_user
                 break
-            elsif input == "next"
+            elsif input == "next" && @game_list.size > 20
                 self.count += 19
-                list_games
+                list_games(@game_list)
                 break
-            elsif input == "previous"
+            elsif input == "previous" && @game_list.size > 20
                 self.count -= 19
-                list_games
+                list_games(@game_list)
                 break
             elsif input == "exit"
                 exit_message
             else
                 wrong_input
-                puts "Please type an integer between #{pastel.yellow(1)} and #{pastel.yellow(games.length)}"
+                puts "Please type an integer between #{pastel.yellow(1)} and #{pastel.yellow(@game_list.length)}"
                 user_selection
                 break
             end    
         end
     end
+        
+
+    # User Messages --
 
     def display_game_info(game)
         puts pastel.cyan(font.write("//")) 
@@ -97,9 +107,6 @@ class Cli
         puts "#{pastel.yellow("Fact:")} #{game.fact}"
         puts pastel.cyan(font.write("//")) 
     end
-        
-
-    # User Messages --
 
     def loading
         spinner = TTY::Spinner.new("[:spinner] #{pastel.yellow("Loading...")}", format: :pulse_2)
@@ -115,7 +122,7 @@ class Cli
     end
     
     def user_choice_message
-        puts "Press '#{pastel.yellow("enter/return")}' key to see the list or type '#{pastel.red("exit")}' to exit"
+        puts "Press '#{pastel.yellow("enter/return")}' key to see the full list, or the year that you're interested into or type '#{pastel.red("exit")}' to exit"
     end
 
     def wrong_input
