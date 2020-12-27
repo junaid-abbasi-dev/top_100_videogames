@@ -122,7 +122,7 @@ class Cli
     end
     
     def user_choice_message
-        puts "Press '#{pastel.yellow("enter/return")}' key to see the full list, or the year that you're interested into or type '#{pastel.red("exit")}' to exit"
+        puts "Press '#{pastel.yellow("enter/return")}' key to see the full list, or type number of '#{pastel.yellow("year")}' that you're interested into or type '#{pastel.red("exit")}' to exit"
     end
 
     def wrong_input
