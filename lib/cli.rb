@@ -9,7 +9,6 @@ class Cli
     end
 
     def run
-        # Run the program by calling Scraper class to get the remote data from the site, and greet user
         Scraper.scrape_games
         menu
     end
@@ -21,7 +20,6 @@ class Cli
     end
 
     def ask_user
-        # Get user input and call method according to it
         user_input = gets.downcase
         if user_input == "\n"
             list_games(games)
@@ -38,7 +36,6 @@ class Cli
     end
 
     def list_games(game_list)
-        # List all the games and ask for input to see additional list or exit program
         @game_list = game_list
         @count ||= 0
         game_list[count..count+19].each.with_index(1) do |game, i|
@@ -52,7 +49,6 @@ class Cli
         elsif count.between?(19, 100) && game_list.size > 20
             next_or_previous
         elsif game_list.size < 20
-            #puts "Please type an integer between #{pastel.yellow(1)} and #{pastel.yellow(game_list.length)}"
             puts 
         else
             wrong_input
@@ -95,8 +91,7 @@ class Cli
         end
     end
         
-
-    # User Messages --
+    # User Messages Methods --
 
     def display_game_info(game)
         puts pastel.cyan(font.write("//")) 
