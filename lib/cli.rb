@@ -1,6 +1,6 @@
 class Cli
     attr_accessor :count
-    attr_reader :games, :pastel, :font, :years_sorted
+    attr_reader :games, :pastel, :font
     def initialize
         @games = Game.all
         @pastel = Pastel.new
